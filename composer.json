@@ -1,0 +1,25 @@
+{
+  "name" : "theseer/CSS2XPath",
+  "description" : "PHP Library to translate CSS selectors into XPath",
+  "license" : "BSD-3-Clause",
+  "authors" : [
+    {
+      "name" : "Arne Blankerts",
+      "email" : "arne@blankerts.de",
+      "role" : "Developer"
+    }
+  ],
+  "support" : {
+    "issues" : "https://github.com/theseer/CSS2XPath/issues"
+  },
+  "require" : {
+    "php" : "^7.0"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "minimum-stability" : "stable",
+  "prefer-stable" : true
+}
