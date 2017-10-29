@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="css2xpath" default="build" basedir=".">
+    <property name="source" value="src"/>
+    <property name="tools" value="${basedir}/tools" />
+
+    <target name="clean" description="Clean up and create artifact directories">
+        <delete dir="${basedir}/build/docs"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/phpab"/>
+
+        <mkdir dir="${basedir}/build/docs"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/phpab"/>
+    </target>
+
+    <target name="lint">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+
+        </apply>
+    </target>
+
+    <target name="phpab" description="Build autoloader">
+        <exec executable="${basedir}/tools/phpab">
+            <arg line="--cache ${basedir}/build/phpab/autoload.cache -1 -o src/autoload.php" />
+            <arg path="src" />
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run unit tests using PHPUnit">
+        <exec executable="${tools}/phpunit" failonerror="true"/>
+    </target>
+
+    <target name="phploc" description="Generate phploc.xml">
+        <exec executable="${basedir}/tools/phploc">
+            <arg line="--count-tests --log-xml ${basedir}/build/logs/phploc.xml ${source} tests"/>
+        </exec>
+    </target>
+
+    <target name="docs">
+        <delete dir="${basedir}/build/docs" />
+        <exec executable="${basedir}/tools/phpdox" />
+    </target>
+
+    <target name="build" depends="clean,lint,phpab,phpunit"/>
+
+</project>
