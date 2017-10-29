@@ -1,5 +1,5 @@
 {
-  "name" : "theseer/CSS2XPath",
+  "name" : "theseer/css2xpath",
   "description" : "PHP Library to translate CSS selectors into XPath",
   "license" : "BSD-3-Clause",
   "authors" : [
