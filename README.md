@@ -2,6 +2,8 @@
 
 This is yet another library to translate various CSS selectors to their XPath equivalent.
 
+[![Build Status](https://travis-ci.org/theseer/css2xpath.svg?branch=master)](https://travis-ci.org/theseer/css2xpath)
+[![Latest Stable Version](https://img.shields.io/packagist/v/theseer/css2xpath.svg)](https://packagist.org/packages/theseer/css2xpath)
 
 ## Example
 
@@ -9,10 +11,10 @@ This is yet another library to translate various CSS selectors to their XPath eq
 
 $translator = new TheSeer\CSS2XPath\Translator();
 
-// Will output '//*[contains(concat(" ",normalize-space(@attribute)," ")," note ")]']
+// Will output //*[contains(concat(" ",normalize-space(@class)," ")," note ")]
 echo $translator->translate('.note');
 
-// Will output '//*[@id="me"]']
+// Will output //*[@id="me"]
 echo $translator->translate('#me');
 ```
 
@@ -26,7 +28,7 @@ composer require theseer/css2xpath
 
 ## Selectors supported
 
-The following selectors are covered:
+The following selectors are currently covered:
 
 - #id
 - tag#id
