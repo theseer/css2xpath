@@ -40,6 +40,8 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase {
             'div[class*=e]'                => ["div[class*=e]", '//div[contains(@class,"e")]'],
             'div[class|=dialog]'           => ["div[class|=dialog]", '//div[@class="dialog" or starts-with(@class,concat("dialog","-"))]'],
             'div[class!=made_up]'          => ["div[class!=made_up]", '//div[not(@class) or @class!="made_up"]'],
+            'div[property!="made_up"]'     => ['div[property!="made_up"]', '//div[not(@property) or @property!="made_up"]'],
+
             'div[class~=example]'          => ["div[class~=example]", '//div[contains(concat(" ",normalize-space(@class)," "),concat(" ","example"," "))]'],
             'div:not(.example)'            => ["div:not(.example)", '//div[not(contains(concat(" ",normalize-space(@class)," ")," example "))]'],
             'p:contains(selectors)'        => ["p:contains(selectors)", '//p[contains(string(.),"selectors")]'],
@@ -55,6 +57,14 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase {
             'p:first-child'                => ["p:first-child", '//*[1]/self::p'],
             'foo|bar'                      => ["foo|bar", '//foo:bar'],
             'div[class^=exa][class$=mple]' => ["div[class^=exa][class$=mple]", '//div[starts-with(@class,"exa") and (substring(@class,string-length(@class)-3)=class)]'],
+
+            'input:enabled'                => ['input:enabled', '//input[not(@disabled)]'],
+            'input:checked'                => ['input:checked', '//input[@checked="checked"]'],
+            'input:disabled'               => ['input:disabled', '//input[@disabled]'],
+
+            ':empty'                       => [':empty', '//*[not(*) and not(normalize-space())]'],
+            ':root'                        => [':root', '/']
+
         ];
     }
 }

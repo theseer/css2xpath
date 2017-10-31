@@ -20,7 +20,7 @@ class Translator {
             $selector = $rule->apply($selector);
         }
 
-        return '//' . $selector;
+        return $selector === '/' ? '/' : '//' . $selector;
     }
 
     private function getRules(): array {
@@ -34,13 +34,13 @@ class Translator {
             new RegexRule('/([a-zA-Z0-9\_\-\*]+)\|([a-zA-Z0-9\_\-\*]+)/', '$1:$2'),
 
             // add @ for attribs
-            new RegexRule("/\[([^\]~\$\*\^\|\!]+)(=[^\]]+)?\]/", '[@$1$2]'),
+            new RegexRule("/\[([^G\]~\$\*\^\|\!]+)(=[^\]]+)?\]/", '[@$1$2]'),
 
             // multiple queries
             new RegexRule("/\s*,\s*/", '|'),
 
             // , + ~ >
-            new RegexRule("/\s*(\+|~|>)\s*/", '$1'),
+            new RegexRule("/\s*([\+~>])\s*/", '$1'),
 
             //* ~ + >
             new RegexRule("/([a-zA-Z0-9\_\-\*])~([a-zA-Z0-9\_\-\*])/", '$1/following-sibling::$2'),
@@ -48,10 +48,10 @@ class Translator {
             new RegexRule("/([a-zA-Z0-9\_\-\*])>([a-zA-Z0-9\_\-\*])/", '$1/$2'),
 
             // all unescaped stuff escaped
-            new RegexRule("/\[([^=]+)=([^'|'][^\]]*)\]/", '[$1="$2"]'),
+            new RegexRule("/\[([^=]+)=([^'|][^\]]*)\]/", '[$1="$2"]'),
 
             // all descendant or self to //
-            new RegexRule("/(^|[^a-zA-Z0-9\_\-\*])(#|\.)([a-zA-Z0-9\_\-]+)/", '$1*$2$3'),
+            new RegexRule("/(^|[^a-zA-Z0-9\_\-\*])([#\.])([a-zA-Z0-9\_\-]+)/", '$1*$2$3'),
             new RegexRule("/([\>\+\|\~\,\s])([a-zA-Z\*]+)/", '$1//$2'),
             new RegexRule("/\s+\/\//", '//'),
 
@@ -59,13 +59,13 @@ class Translator {
             new RegexRule("/([a-zA-Z0-9\_\-\*]+):first-child/", '*[1]/self::$1'),
 
             // :last-child
-            new RegexRule("/([a-zA-Z0-9\_\-\*]+):last-child/", '$1[not(following-sibling::*)]'),
+            new RegexRule("/([a-zA-Z0-9\_\-\*]+)?:last-child/", '$1[not(following-sibling::*)]'),
 
             // :only-child
             new RegexRule("/([a-zA-Z0-9\_\-\*]+):only-child/", '*[last()=1]/self::$1'),
 
             // :empty
-            new RegexRule("/([a-zA-Z0-9\_\-\*]+):empty/", '$1[not(*) and not(normalize-space())]'),
+            new RegexRule("/([a-zA-Z0-9\_\-\*]+)?:empty/", '$1[not(*) and not(normalize-space())]'),
 
             // :not
             new NotRule($this),
@@ -92,15 +92,26 @@ class Translator {
             new DollarEqualRule(),
 
             // != attrib
-            new RegexRule("/\[([a-zA-Z0-9\_\-]+)\!=([^\]]+)\]/", '[not(@$1) or @$1!=$2]'),
+            new RegexRule("/\[([a-zA-Z0-9\_\-]+)\!=[\"']+?([^\"\]]+)[\"']+?\]/", '[not(@$1) or @$1!="$2"]'),
 
-            // ids and classes
+            // ids
             new RegexRule("/#([a-zA-Z0-9\_\-]+)/", '[@id="$1"]'),
-            new RegexRule("/\.([a-zA-Z0-9\_\-]+)/", '[contains(concat(" ",normalize-space(@class)," ")," $1 ")]'),
+
+            // classes
+            new RegexRule("/\.([a-zA-Z0-9_-]+)(?![^[]*])/", '[contains(concat(" ",normalize-space(@class)," ")," $1 ")]'),
 
             // normalize multiple filters
-            new RegexRule("/\]\[([^\]]+)/", ' and ($1)')
+            new RegexRule("/\]\[([^\]]+)/", ' and ($1)'),
 
+            // tag:pseudo selectors
+            new RegexRule('/(:enabled)/', '[not(@disabled)]'),
+            new RegexRule("/(:checked)/", '[@checked="checked"]'),
+            new RegexRule("/:(disabled)/", '[@$1]'),
+            new RegexRule("/:root/", '/'),
+
+            // use * when tag was omitted
+            new RegexRule("/^\[/", "*["),
+            new RegexRule("/\|\[/", "|*[")
         ];
 
         return $this->rules;
