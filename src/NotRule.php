@@ -11,7 +11,7 @@ class NotRule implements RuleInterface {
     }
 
     public function apply(string $selector): string {
-        return preg_replace_callback(
+        return \preg_replace_callback(
             '/([a-zA-Z0-9\_\-\*]+):not\(([^\)]*)\)/',
             [$this, 'callback'],
             $selector
@@ -19,7 +19,7 @@ class NotRule implements RuleInterface {
     }
 
     private function callback(array $matches): string {
-        $subresult = preg_replace(
+        $subresult = \preg_replace(
             '/^[^\[]+\[([^\]]*)\].*$/',
             '$1',
             $this->translator->translate($matches[2])
@@ -27,5 +27,4 @@ class NotRule implements RuleInterface {
 
         return $matches[1] . '[not(' . $subresult . ')]';
     }
-
 }

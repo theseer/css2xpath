@@ -10,12 +10,11 @@ class RegexRule implements RuleInterface {
     private $replacement;
 
     public function __construct(string $regex, string $replacement) {
-        $this->regex = $regex;
+        $this->regex       = $regex;
         $this->replacement = $replacement;
     }
 
     public function apply(string $selector): string {
-        return preg_replace($this->regex, $this->replacement, $selector);
+        return \preg_replace($this->regex, $this->replacement, $selector);
     }
-
 }

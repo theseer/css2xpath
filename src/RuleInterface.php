@@ -2,8 +2,5 @@
 namespace TheSeer\CSS2XPath;
 
 interface RuleInterface {
-
     public function apply(string $selector): string;
-
 }
-

@@ -7,7 +7,6 @@ namespace TheSeer\CSS2XPath;
  * The regular expressions used in this class are heavily inspired by and mostly adopted from
  * the css2xpath.js code by Andrea Giammarchi (http://code.google.com/p/css2xpath/).
  * The JavaScript version (css2xpath.js) is licensed under the MIT License
- *
  */
 class Translator {
 
@@ -15,7 +14,7 @@ class Translator {
     private $rules;
 
     public function translate(string $selector): string {
-        foreach($this->getRules() as $rule) {
+        foreach ($this->getRules() as $rule) {
             /** @var RuleInterface $rule */
             $selector = $rule->apply($selector);
         }
@@ -105,13 +104,13 @@ class Translator {
 
             // tag:pseudo selectors
             new RegexRule('/(:enabled)/', '[not(@disabled)]'),
-            new RegexRule("/(:checked)/", '[@checked="checked"]'),
-            new RegexRule("/:(disabled)/", '[@$1]'),
-            new RegexRule("/:root/", '/'),
+            new RegexRule('/(:checked)/', '[@checked="checked"]'),
+            new RegexRule('/:(disabled)/', '[@$1]'),
+            new RegexRule('/:root/', '/'),
 
             // use * when tag was omitted
-            new RegexRule("/^\[/", "*["),
-            new RegexRule("/\|\[/", "|*[")
+            new RegexRule("/^\[/", '*['),
+            new RegexRule("/\|\[/", '|*[')
         ];
 
         return $this->rules;
