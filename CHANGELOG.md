@@ -10,7 +10,7 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 * Update tools
 * Tweaked Type declarations 
 
-## [1.1.0] - 2019-08-28
+## [1.1.0] - 2017-10-31
 
 ### Added
 
