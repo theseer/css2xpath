@@ -6,3 +6,4 @@
 /tools
 /vendor
 cache.properties
+*.cache
