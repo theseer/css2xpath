@@ -23,7 +23,7 @@ class Translator {
     }
 
     private function getRules(): array {
-        if ($this->rules != null) {
+        if ($this->rules !== null) {
             return $this->rules;
         }
 

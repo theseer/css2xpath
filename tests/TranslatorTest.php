@@ -6,12 +6,12 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase {
     /**
      * @dataProvider provider
      */
-    public function testTranslatingCssSelectorReturnsCorrectXPath($selector, $xpath): void {
+    public function testTranslatingCssSelectorReturnsCorrectXPath(string $selector, string $xpath): void {
         $translator = new Translator();
         $this->assertEquals($xpath, $translator->translate($selector));
     }
 
-    public function provider() {
+    public function provider(): array {
         return [
             'div'                          => ['div', '//div'],
             'body div'                     => ['body div', '//body//div'],
